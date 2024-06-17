@@ -24,6 +24,7 @@ namespace DeveloperDays.Berlin.Tests.Unit.TheUgly
             var service = new ShoppingCartService();
             service.AddItemToCart("item1", 1);
             service.AddItemToCart("item2", 1);
+            service.AddItemToCart("item3", 0); // What is wrong with this line?
             var total = service.CalculateTotalPrice();
             Assert.True(total == 30); // Hardcoded magic number
         }

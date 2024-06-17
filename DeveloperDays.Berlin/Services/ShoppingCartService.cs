@@ -5,33 +5,28 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using DeveloperDays.Berlin.DataStorages;
 
 namespace DeveloperDays.Berlin.Services
 {
     public class ShoppingCartService
     {
-        private readonly Dictionary<string, (double price, int stock)> inventory;
-        private readonly List<(string itemId, int quantity)> cart;
+        private readonly DataStorage dataStorage;
 
-        public ShoppingCartService()
-        {
-            inventory = new Dictionary<string, (double price, int stock)>
-            {
-                { "item1", (10.0, 5) },
-                { "item2", (20.0, 3) },
-                { "item3", (15.0, 0) } // out of stock item
-            };
-            cart = [];
-        }
+        public ShoppingCartService() =>
+            this.dataStorage = new DataStorage();
 
         public bool AddItemToCart(string itemId, int quantity)
         {
-            if (!inventory.TryGetValue(itemId, out (double price, int stock) value) 
+            var inventory = dataStorage.GetInventory();
+
+            if (!inventory.TryGetValue(itemId, out (double price, int stock) value)
                 || value.stock < quantity)
             {
                 return false;
             }
 
+            var cart = dataStorage.GetCart();
             var existingItem = cart.FirstOrDefault(x => x.itemId == itemId);
             if (existingItem != default)
             {
@@ -49,6 +44,9 @@ namespace DeveloperDays.Berlin.Services
 
         public double CalculateTotalPrice()
         {
+            var inventory = this.dataStorage.GetInventory();
+            var cart = this.dataStorage.GetCart();
+
             return cart.Sum(x => x.quantity * inventory[x.itemId].price);
         }
 
@@ -60,6 +58,8 @@ namespace DeveloperDays.Berlin.Services
 
         public Dictionary<string, int> GetCartContents()
         {
+            var cart = this.dataStorage.GetCart();
+
             return cart.ToDictionary(x => x.itemId, x => x.quantity);
         }
     }
