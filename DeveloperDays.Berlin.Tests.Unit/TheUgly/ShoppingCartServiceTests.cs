@@ -12,7 +12,7 @@ namespace DeveloperDays.Berlin.Tests.Unit.TheUgly
         [Fact]
         public void Test1()
         {
-            var dataStorage = new DataStorages.DataStorage();   
+            var dataStorage = new DataStorages.DataStorage();
             var service = new ShoppingCartService(dataStorage);
             service.AddItemToCart("item1", 2);
             var total = service.CalculateTotalPrice();

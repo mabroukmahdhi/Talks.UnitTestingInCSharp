@@ -3,13 +3,12 @@
 // Made w/ love by Mabrouk Mahdhi for all .NET developer days attendees
 // ---------------------------------------------------------------------
 
-using System.Collections;
 using System.Collections.Generic;
 using DeveloperDays.Berlin.Data;
 
 namespace DeveloperDays.Berlin.DataStorages
 {
-    public class DataStorage: IDataStorage
+    public class DataStorage : IDataStorage
     {
         private readonly List<Item> inventory;
         private readonly List<CartItem> cart;
