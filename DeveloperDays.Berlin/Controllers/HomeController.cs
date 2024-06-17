@@ -13,6 +13,6 @@ namespace DeveloperDays.Berlin.Controllers
     {
         [HttpGet]
         public string Get() =>
-            "Hello from DeveloperDays Berlin!";
+            "Hello from .NET Developer Days Berlin!";
     }
 }
