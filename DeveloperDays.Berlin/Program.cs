@@ -3,6 +3,8 @@
 // Made w/ love by Mabrouk Mahdhi for all .NET developer days attendees
 // ---------------------------------------------------------------------
 
+using System.Net.Http;
+using DeveloperDays.Berlin.Brokers.Storages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +20,10 @@ namespace DeveloperDays.Berlin
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped(options => new HttpClient());
+
+            builder.Services.AddDbContext<StorageBroker>();
 
             var app = builder.Build();
 
