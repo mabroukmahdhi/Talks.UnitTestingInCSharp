@@ -5,40 +5,49 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using DeveloperDays.Berlin.Data;
 using DeveloperDays.Berlin.DataStorages;
 
 namespace DeveloperDays.Berlin.Services
 {
-    public class ShoppingCartService
+    public class ShoppingCartService(IDataStorage dataStorage)
     {
-        private readonly DataStorage dataStorage;
-
-        public ShoppingCartService() =>
-            this.dataStorage = new DataStorage();
+        private readonly IDataStorage dataStorage = dataStorage;
 
         public bool AddItemToCart(string itemId, int quantity)
         {
             var inventory = dataStorage.GetInventory();
 
-            if (!inventory.TryGetValue(itemId, out (double price, int stock) value)
-                || value.stock < quantity)
+            var maybeItem = inventory.FirstOrDefault(item => item.ItemId == itemId);
+
+            if (maybeItem is null || maybeItem.Stock < quantity)
             {
                 return false;
             }
 
             var cart = dataStorage.GetCart();
-            var existingItem = cart.FirstOrDefault(x => x.itemId == itemId);
+            var existingItem = cart.FirstOrDefault(x => x.ItemId == itemId);
+
             if (existingItem != default)
             {
                 cart.Remove(existingItem);
-                cart.Add((itemId, existingItem.quantity + quantity));
+                cart.Add(new CartItem
+                {
+                    ItemId = itemId,
+                    Quantity = existingItem.Quantity + quantity
+                });
             }
             else
             {
-                cart.Add((itemId, quantity));
+                cart.Add(new CartItem
+                {
+                    ItemId = itemId,
+                    Quantity = quantity
+                });
             }
 
-            inventory[itemId] = (value.price, value.stock - quantity);
+            maybeItem.Stock -= quantity;
+
             return true;
         }
 
@@ -47,7 +56,7 @@ namespace DeveloperDays.Berlin.Services
             var inventory = this.dataStorage.GetInventory();
             var cart = this.dataStorage.GetCart();
 
-            return cart.Sum(x => x.quantity * inventory[x.itemId].price);
+            return cart.Sum(x => x.Quantity * inventory.First(item => item.ItemId == x.ItemId).Price);
         }
 
         public double ApplyDiscount(double discountPercentage)
@@ -60,7 +69,7 @@ namespace DeveloperDays.Berlin.Services
         {
             var cart = this.dataStorage.GetCart();
 
-            return cart.ToDictionary(x => x.itemId, x => x.quantity);
+            return cart.ToDictionary(x => x.ItemId, x => x.Quantity);
         }
     }
 }

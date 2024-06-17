@@ -12,7 +12,8 @@ namespace DeveloperDays.Berlin.Tests.Unit.TheUgly
         [Fact]
         public void Test1()
         {
-            var service = new ShoppingCartService();
+            var dataStorage = new DataStorages.DataStorage();   
+            var service = new ShoppingCartService(dataStorage);
             service.AddItemToCart("item1", 2);
             var total = service.CalculateTotalPrice();
             Assert.True(total == 20); // Hardcoded magic number
@@ -21,7 +22,8 @@ namespace DeveloperDays.Berlin.Tests.Unit.TheUgly
         [Fact]
         public void Test2()
         {
-            var service = new ShoppingCartService();
+            var dataStorage = new DataStorages.DataStorage();
+            var service = new ShoppingCartService(dataStorage);
             service.AddItemToCart("item1", 1);
             service.AddItemToCart("item2", 1);
             service.AddItemToCart("item3", 0); // What is wrong with this line?
