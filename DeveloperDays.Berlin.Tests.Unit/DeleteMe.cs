@@ -21,13 +21,13 @@ namespace DeveloperDays.Berlin.Tests.Unit
             Assert.Equal(expected, Add(a, b));
 
         [Fact]
-        public void ShouldAddCorrectly()
+        public void ShouldAddCorrectly() // Is that test really good ?
         {
             // given
             var a = GetRandomNumber();
             var b = GetRandomNumber();
 
-            var expected = a + b; // What is wrong with this line?
+            var expected = a + b; 
 
             // when
             var actual = Add(a, b);

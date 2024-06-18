@@ -25,7 +25,9 @@ namespace DeveloperDays.Berlin.Services
                 return false;
             }
 
+            // _ = dataStorage.GetCart();
             var cart = dataStorage.GetCart();
+            
             var existingItem = cart.FirstOrDefault(x => x.ItemId == itemId);
 
             if (existingItem != default)
