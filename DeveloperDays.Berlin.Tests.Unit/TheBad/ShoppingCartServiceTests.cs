@@ -9,7 +9,7 @@ namespace DeveloperDays.Berlin.Tests.Unit.TheBad
 {
     public class ShoppingCartServiceTests
     {
-        private readonly ShoppingCartService service = 
+        private readonly ShoppingCartService service =
             new(new DataStorages.DataStorage());
 
         [Fact]
