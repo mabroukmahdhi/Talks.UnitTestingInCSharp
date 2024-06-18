@@ -37,6 +37,27 @@ namespace DeveloperDays.Berlin.Tests.Unit.TheGood
             return inventory;
         }
 
+        private static List<Item> GetRandomInventory(
+            List<CartItem> cartItems,
+            double totalPrice)
+        {
+            var inventory = new List<Item>();
+
+            var cartItemsCount = cartItems.Count;
+
+            var pricePerItem = totalPrice / cartItemsCount;
+
+            for (var i = 0; i < cartItems.Count; i++)
+            {
+                inventory.Add(new Item
+                {
+                    ItemId = cartItems[i].ItemId,
+                    Price = pricePerItem / cartItems[i].Quantity,
+                });
+            }
+            return inventory;
+        }
+
         private static Item CreateRandomItem()
         {
             var filler = new Filler<Item>();
@@ -50,7 +71,36 @@ namespace DeveloperDays.Berlin.Tests.Unit.TheGood
             return filler.Create();
         }
 
+        private static List<CartItem> GetRandomCart()
+        {
+            var randomCount = GetRandomNumber(1, 10);
+
+            var cart = new List<CartItem>();
+
+            for (var i = 0; i < randomCount; i++)
+            {
+                cart.Add(CreateRandomCartItem());
+            }
+            return cart;
+        }
+
+        private static CartItem CreateRandomCartItem()
+        {
+            var filler = new Filler<CartItem>();
+
+            var randomQuantity = GetRandomNumber(1, 10);
+
+            filler.Setup()
+                .OnProperty(item => item.Quantity)
+                .Use(randomQuantity);
+
+            return filler.Create();
+        }
+
         private static int GetRandomNumber(int min, int max) =>
             new IntRange(min, max).GetValue();
+
+        private static double GetRandomPrice(double min, double max) =>
+           new DoubleRange(min, max).GetValue();
     }
 }

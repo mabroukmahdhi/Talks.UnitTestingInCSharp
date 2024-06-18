@@ -3,19 +3,18 @@
 // Made w/ love by Mabrouk Mahdhi for all .NET developer days attendees
 // --------------------------------------------------------------------- 
 
-using DeveloperDays.Berlin.Data;
 using DeveloperDays.Berlin.Services;
 
 namespace DeveloperDays.Berlin.Tests.Unit.TheBad
 {
     public class ShoppingCartServiceTests
     {
-        private readonly ShoppingCartService service = new(new DataStorages.DataStorage());
+        private readonly ShoppingCartService service = 
+            new(new DataStorages.DataStorage());
 
         [Fact]
         public void ShouldAddItemToCart()
         {
-            var item = new Item { ItemId = "item1", Price = 10 };
             var isAdded = service.AddItemToCart("item1", 2);
 
             Assert.True(isAdded);

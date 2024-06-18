@@ -54,5 +54,45 @@ namespace DeveloperDays.Berlin.Tests.Unit.TheGood
 
             this.dataStorageMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public void ShouldCalculateCartTotalPrice() // Do Not Repeat The Business Logic !!
+        {
+            // given
+            var randomCart = GetRandomCart();
+            var retrievedCart = randomCart;
+
+            var randomTotalPrice = GetRandomPrice(100, 1000);
+            var expectedTotalPrice = randomTotalPrice;
+
+            var randomInventory = GetRandomInventory(
+                cartItems: randomCart,
+                totalPrice: randomTotalPrice);
+
+            var retrievedInventory = randomInventory;
+            var retrievedInventoryCount = retrievedInventory.Count;
+
+            this.dataStorageMock.Setup(storage =>
+                storage.GetInventory())
+                .Returns(retrievedInventory);
+
+            this.dataStorageMock.Setup(storage =>
+                storage.GetCart())
+                .Returns(retrievedCart);
+
+            // when
+            var actualTotalPrice = service.CalculateTotalPrice();
+
+            // then
+            actualTotalPrice.Should().Be(expectedTotalPrice);
+
+            this.dataStorageMock.Verify(storage =>
+                storage.GetInventory(), Times.Once);
+
+            this.dataStorageMock.Verify(storage =>
+                storage.GetCart(), Times.Once);
+
+            this.dataStorageMock.VerifyNoOtherCalls();
+        }
     }
 }
